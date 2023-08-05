@@ -8,12 +8,12 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.BackLimelight;
 import frc.robot.subsystems.Drive.DriveSubsystem;
 
 public class AlignToCube extends CommandBase {
   private DriveSubsystem m_drivetrain;
-  private Limelight m_limelight;
+  private BackLimelight m_limelight;
 
   private ProfiledPIDController xController;
   private ProfiledPIDController yController;
@@ -29,7 +29,7 @@ public class AlignToCube extends CommandBase {
   //private double thetaControllerkP
 
   /** Creates a new SmoothAlign. */
-  public AlignToCube(DriveSubsystem m_drivetrain, Limelight m_limelight) {
+  public AlignToCube(DriveSubsystem m_drivetrain, BackLimelight m_limelight) {
     this.m_drivetrain = m_drivetrain;
     this.m_limelight = m_limelight;
 

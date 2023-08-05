@@ -30,7 +30,7 @@ import frc.robot.commands.auto.Open.TwoCargoBalanceOpenAuto;
 import frc.robot.commands.auto.Open.TwoCargoOpenAuto;
 import frc.robot.subsystems.Infrastructure;
 import frc.robot.subsystems.LED;
-import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.BackLimelight;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Arm.Arm;
 import frc.robot.subsystems.Arm.Claw;
@@ -52,7 +52,7 @@ public class RobotContainer {
 	// The robot's subsystems
 	private final Infrastructure m_infrastructure = new Infrastructure();
 	private final DriveSubsystem m_drivetrain = new DriveSubsystem();
-	private final Limelight m_limelight = new Limelight();
+	private final BackLimelight m_limelight = new BackLimelight();
 	private final Arm m_arm = new Arm();
 	private final Claw m_claw = new Claw();
 	private final LED m_led = new LED();
@@ -124,8 +124,10 @@ public class RobotContainer {
 			
 		//autoalign on right bumper
 		m_driverController.rightBumper()
-			.whileTrue(m_superstructure.getAlign());
-		
+			.whileTrue(m_superstructure.getAlignBack());
+		//front autoalign on right stick button
+		m_driverController.leftTrigger()
+			.whileTrue(m_superstructure.getAlignFront());
 		//press to score on left bumper
 		m_driverController.leftBumper()
 			.onTrue(m_superstructure.ScoreCommand())

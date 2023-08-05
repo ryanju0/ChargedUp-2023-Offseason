@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.TurnToAngle;
+import frc.robot.commands.align.AlignIntake;
 import frc.robot.commands.align.AlignToCone;
 import frc.robot.commands.align.AlignToCube;
 import frc.robot.subsystems.Arm.Arm;
@@ -41,7 +42,8 @@ public class Superstructure {
 
   Shooter m_shooter;
 
-  Limelight m_limelight;
+  BackLimelight m_limelight;
+  FrontLimelight m_frontlimelight;
 
   LED m_led;
 
@@ -72,7 +74,7 @@ public class Superstructure {
   public CargoType cargoType = CargoType.CONE; //default to cone
 
   /** Creates a new Superstructure. */
-  public Superstructure(DriveSubsystem m_drivetrain, Arm m_arm, Claw m_claw, Shooter m_shooter, Limelight m_limelight, LED m_led) {
+  public Superstructure(DriveSubsystem m_drivetrain, Arm m_arm, Claw m_claw, Shooter m_shooter, BackLimelight m_limelight, LED m_led) {
     this.m_drivetrain = m_drivetrain;
     this.m_arm = m_arm;
     this.m_claw = m_claw;
@@ -247,11 +249,28 @@ public class Superstructure {
     );
   }
 
-  public Command getAlign() {
+  public Command getAlignBack() {
     final SelectCommand armAlign = new SelectCommand(
       Map.ofEntries(
         Map.entry(CargoType.CONE, new AlignToCone(m_drivetrain, m_limelight)), // align to cone
         Map.entry(CargoType.CUBE, new AlignToCube(m_drivetrain, m_limelight)) //align to cube
+      ), 
+      () -> getCargoType()
+    );
+
+    return new SelectCommand(
+      Map.ofEntries(
+        Map.entry(ScoreMode.ARM, armAlign),
+        Map.entry(ScoreMode.SHOOTER, new TurnToAngle(m_drivetrain, 180))
+      ), 
+      () -> getScoreMode()
+    );
+  }
+
+  public Command getAlignFront() {
+    final SelectCommand armAlign = new SelectCommand(
+      Map.ofEntries(
+        Map.entry(ScoreMode.SHOOTER, new AlignIntake(m_drivetrain, m_frontlimelight)) // align to cone
       ), 
       () -> getCargoType()
     );
