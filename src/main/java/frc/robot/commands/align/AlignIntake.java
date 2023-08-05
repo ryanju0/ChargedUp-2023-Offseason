@@ -51,7 +51,7 @@ public class AlignIntake extends CommandBase {
       // Called when the command is initially scheduled.
       @Override
       public void initialize() {
-        m_limelight.setRetroPipeline();
+        m_limelight.setIntakePipeline();
         m_limelight.setLED(true);
       }
     

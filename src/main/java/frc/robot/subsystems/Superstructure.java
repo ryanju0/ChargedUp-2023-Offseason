@@ -268,17 +268,9 @@ public class Superstructure {
   }
 
   public Command getAlignFront() {
-    final SelectCommand armAlign = new SelectCommand(
-      Map.ofEntries(
-        Map.entry(ScoreMode.SHOOTER, new AlignIntake(m_drivetrain, m_frontlimelight)) // align to cone
-      ), 
-      () -> getCargoType()
-    );
-
     return new SelectCommand(
       Map.ofEntries(
-        Map.entry(ScoreMode.ARM, armAlign),
-        Map.entry(ScoreMode.SHOOTER, new TurnToAngle(m_drivetrain, 180))
+        Map.entry(ScoreMode.SHOOTER, new AlignIntake(m_drivetrain, m_frontlimelight))
       ), 
       () -> getScoreMode()
     );
