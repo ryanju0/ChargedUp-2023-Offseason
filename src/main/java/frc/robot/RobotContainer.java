@@ -126,7 +126,7 @@ public class RobotContainer {
 		m_driverController.rightBumper()
 			.whileTrue(m_superstructure.getAlignBack());
 		//front autoalign on right stick button
-		m_driverController.leftTrigger()
+		m_driverController.rightStick()
 			.whileTrue(m_superstructure.getAlignFront());
 		//press to score on left bumper
 		m_driverController.leftBumper()
