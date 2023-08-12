@@ -74,12 +74,13 @@ public class Superstructure {
   public CargoType cargoType = CargoType.CONE; //default to cone
 
   /** Creates a new Superstructure. */
-  public Superstructure(DriveSubsystem m_drivetrain, Arm m_arm, Claw m_claw, Shooter m_shooter, BackLimelight m_limelight, LED m_led) {
+  public Superstructure(DriveSubsystem m_drivetrain, Arm m_arm, Claw m_claw, Shooter m_shooter, BackLimelight m_limelight, FrontLimelight m_frontlimelight, LED m_led) {
     this.m_drivetrain = m_drivetrain;
     this.m_arm = m_arm;
     this.m_claw = m_claw;
     this.m_shooter = m_shooter;
     this.m_limelight = m_limelight;
+    this.m_frontlimelight = m_frontlimelight;
     this.m_led = m_led;
 
     m_armStateMachine = new ArmStateMachine(m_arm);

@@ -13,8 +13,8 @@ import frc.robot.utils.LimelightHelpers;
 public class FrontLimelight extends SubsystemBase {
 
 	private String limelightName = "limelight-front";
-	private double kCameraHeight = 9.14; //TBD
-	private double kMountingAngle = 35.0;//TBD
+	private double kCameraHeight = 27.75; //TBD
+	private double kMountingAngle = 0;//TBD
 	private double GoalHeight = 24.5; //inches, deg
 
 	public FrontLimelight() {}
@@ -72,7 +72,7 @@ public class FrontLimelight extends SubsystemBase {
 
 	//Front Limelight
 	public void setIntakePipeline(){
-		LimelightHelpers.setPipelineIndex(limelightName, 3); //3rd pipeline for looking at purple
+		LimelightHelpers.setPipelineIndex(limelightName, 1); //3rd pipeline for looking at purple
 	}
 
 	public Command setLEDCommand(boolean lightOn) {
@@ -85,6 +85,6 @@ public class FrontLimelight extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-
+		SmartDashboard.putNumber("front ll distance to goal", getDistanceToGoalMeters());
 	}
 }

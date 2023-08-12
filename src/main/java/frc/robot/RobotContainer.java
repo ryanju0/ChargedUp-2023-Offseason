@@ -31,6 +31,7 @@ import frc.robot.commands.auto.Open.TwoCargoOpenAuto;
 import frc.robot.subsystems.Infrastructure;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.BackLimelight;
+import frc.robot.subsystems.FrontLimelight;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Arm.Arm;
 import frc.robot.subsystems.Arm.Claw;
@@ -53,12 +54,13 @@ public class RobotContainer {
 	private final Infrastructure m_infrastructure = new Infrastructure();
 	private final DriveSubsystem m_drivetrain = new DriveSubsystem();
 	private final BackLimelight m_limelight = new BackLimelight();
+	private final FrontLimelight m_frontlimelight = new FrontLimelight();
 	private final Arm m_arm = new Arm();
 	private final Claw m_claw = new Claw();
 	private final LED m_led = new LED();
 	private final Shooter m_shooter = new Shooter();
 	
-	private final Superstructure m_superstructure = new Superstructure(m_drivetrain, m_arm, m_claw, m_shooter, m_limelight, m_led);
+	private final Superstructure m_superstructure = new Superstructure(m_drivetrain, m_arm, m_claw, m_shooter, m_limelight, m_frontlimelight, m_led);
 
 	// The driver's controller
 	CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);

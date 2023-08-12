@@ -7,6 +7,7 @@ package frc.robot.commands.align;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.FrontLimelight;
 import frc.robot.subsystems.Drive.DriveSubsystem;
@@ -43,7 +44,7 @@ public class AlignIntake extends CommandBase {
         yController.setGoal(0);
         yController.setTolerance(Units.degreesToRadians(0),0);
     
-        thetaController.setGoal(0);
+        thetaController.setGoal(Units.degreesToRadians(180));
         thetaController.setTolerance(Units.degreesToRadians(0),0);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
       }
@@ -79,5 +80,5 @@ public class AlignIntake extends CommandBase {
       @Override
       public boolean isFinished() {
         return xController.atGoal() && yController.atGoal() && thetaController.atGoal();
-    }
+      }
 }
