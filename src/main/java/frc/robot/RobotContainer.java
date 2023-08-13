@@ -58,7 +58,7 @@ public class RobotContainer {
 	private final Arm m_arm = new Arm();
 	private final Claw m_claw = new Claw();
 	private final LED m_led = new LED();
-	private final Shooter m_shooter = new Shooter();
+	private final Shooter m_shooter = new Shooter(m_frontlimelight, m_drivetrain);
 	
 	private final Superstructure m_superstructure = new Superstructure(m_drivetrain, m_arm, m_claw, m_shooter, m_limelight, m_frontlimelight, m_led);
 

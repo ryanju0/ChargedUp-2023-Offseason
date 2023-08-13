@@ -70,6 +70,18 @@ public class FrontLimelight extends SubsystemBase {
 		LimelightHelpers.setPipelineIndex(limelightName, 2);
 	}
 
+	public void setHighCubePipeline() {
+		LimelightHelpers.setPipelineIndex(limelightName, 3);
+	}
+
+	public void setMiddleCubePipeline() {
+		LimelightHelpers.setPipelineIndex(limelightName, 4);
+	}
+
+	public void setLowCubePipeline() {
+		LimelightHelpers.setPipelineIndex(limelightName, 5);
+	}
+
 	//Front Limelight
 	public void setIntakePipeline(){
 		LimelightHelpers.setPipelineIndex(limelightName, 1); //3rd pipeline for looking at purple

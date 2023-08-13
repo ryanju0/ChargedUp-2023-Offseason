@@ -13,6 +13,7 @@ import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import frc.robot.utils.InterpolatingTreeMap;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,7 +23,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.TurnToAngle;
+import frc.robot.subsystems.FrontLimelight;
+import frc.robot.subsystems.Drive.DriveSubsystem;
 import frc.robot.utils.ShooterPreset;
+import frc.robot.utils.TunableNumber;
 
 public class Shooter extends SubsystemBase {
   private CANSparkMax kickerMotor;
@@ -37,6 +42,13 @@ public class Shooter extends SubsystemBase {
   private PIDController pivotController = new PIDController(0, 0, 0);
   private PIDController flywheelController = new PIDController(0.5, 0, 0);
 
+  private InterpolatingTreeMap shooterVelocity = new InterpolatingTreeMap();
+  private InterpolatingTreeMap pivotAngle = new InterpolatingTreeMap();
+
+  private FrontLimelight m_limelight;
+  private TunableNumber tunablePivotAngle = new TunableNumber("set pivot angle", 0);
+  private TunableNumber tunableShooterVelocity = new TunableNumber("set shooter velocity", 0);
+
   public enum KickerState {
     INTAKING, OUTTAKING, STOPPED
   }
@@ -45,9 +57,13 @@ public class Shooter extends SubsystemBase {
   private Timer kickerRunningTimer = new Timer();
 
   private boolean isShooterEnabled = false;
+
+  private DriveSubsystem m_drivetrain;
   
   /** Creates a new Shooter. */
-  public Shooter() {
+  public Shooter(FrontLimelight m_limelight, DriveSubsystem m_drivetrain) {
+    this.m_limelight = m_limelight;
+    this.m_drivetrain = m_drivetrain;
     kickerMotor = new CANSparkMax(ShooterConstants.kKickerMotorCanId, CANSparkMaxLowLevel.MotorType.kBrushless);
     pivotMotor = new CANSparkMax(ShooterConstants.kPivotMotorCanId, CANSparkMaxLowLevel.MotorType.kBrushless);
     kickerMotor.setInverted(true);
@@ -79,6 +95,25 @@ public class Shooter extends SubsystemBase {
 
     pivotController.disableContinuousInput();
     pivotController.setTolerance(Units.degreesToRadians(7));
+
+    populateVelocityMap();
+    populatePivotMap();
+  }
+
+  private void populateVelocityMap() {
+    // TBD
+  }
+
+  private void populatePivotMap() {
+    // TBD
+  }
+
+  public void setDynamicPivot() {
+    setTargetPivot(m_limelight.isTargetVisible() ? pivotAngle.getInterpolated(m_limelight.getDistanceToGoalMeters()) : 0);
+  }
+
+  public void setDynamicVelocity() {
+    setTargetVelocity(m_limelight.isTargetVisible() ? shooterVelocity.getInterpolated(m_limelight.getDistanceToGoalMeters()) : 0);
   }
 
   //enable funtions
@@ -184,6 +219,40 @@ public class Shooter extends SubsystemBase {
     );
   }
 
+  public Command setHigh() {
+    m_limelight.setHighCubePipeline();
+    return new SequentialCommandGroup(
+      new TurnToAngle(m_drivetrain, 180),
+      new InstantCommand(() -> {
+        setDynamicVelocity();
+        setDynamicPivot();
+      }),
+      new WaitUntilCommand(() -> atPivotSetpoint())
+    );
+  }
+  public Command setMiddle() {
+    m_limelight.setMiddleCubePipeline();
+    return new SequentialCommandGroup(
+      new TurnToAngle(m_drivetrain, 180),
+      new InstantCommand(() -> {
+        setDynamicVelocity();
+        setDynamicPivot();
+      }),
+      new WaitUntilCommand(() -> atPivotSetpoint())
+    );
+  }
+  public Command setLow() {
+    m_limelight.setLowCubePipeline();
+    return new SequentialCommandGroup(
+      new TurnToAngle(m_drivetrain, 180),
+      new InstantCommand(() -> {
+        setDynamicVelocity();
+        setDynamicPivot();
+      }),
+      new WaitUntilCommand(() -> atPivotSetpoint())
+    );
+  }
+
   public boolean isCurrentSpikeDetected() {
     return (kickerRunningTimer.get() > 0.15) && //excludes current spike when motor first starts
       (kickerMotor.getOutputCurrent() > 25) && //cube intake current threshold
@@ -201,6 +270,7 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     setCalculatedPivotVoltage();
     setCalculatedFlywheelVoltage();
+    setPreset(new ShooterPreset(tunablePivotAngle.get(), tunableShooterVelocity.get()));
     
     SmartDashboard.putNumber("Shooter Pivot", Units.radiansToDegrees(getPivotAngleRadians()));
     SmartDashboard.putNumber("Shooter Target Pivot", Units.radiansToDegrees(getPivotTarget()));

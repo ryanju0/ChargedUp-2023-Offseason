@@ -69,10 +69,10 @@ public class ShooterStateMachine {
   private Command toDynamic(ShooterScoreLevel shooterScorelevel) {
     return new SelectCommand(
         Map.ofEntries(
-          Map.entry(ShooterScoreLevel.HIGH, m_shooter.setPreset(ShooterConstants.kCloseHighCubePreset)),
-          Map.entry(ShooterScoreLevel.MIDDLE, m_shooter.setPreset(ShooterConstants.kCloseMiddleCubePreset)),
-          Map.entry(ShooterScoreLevel.LOW, m_shooter.setPreset(ShooterConstants.kLaunchCubePreset)),
-          Map.entry(ShooterScoreLevel.INTAKE, m_shooter.setPreset(ShooterConstants.kLaunchCubePreset))
+          Map.entry(ShooterScoreLevel.HIGH, m_shooter.setHigh()),
+          Map.entry(ShooterScoreLevel.MIDDLE, m_shooter.setMiddle()),
+          Map.entry(ShooterScoreLevel.LOW, m_shooter.setLow()),
+          Map.entry(ShooterScoreLevel.INTAKE, m_shooter.intakeSequence())
         ), () -> shooterScorelevel);
       //m_shooter.setDynamicEnabledCommand(true, shooterScorelevel));
   }
