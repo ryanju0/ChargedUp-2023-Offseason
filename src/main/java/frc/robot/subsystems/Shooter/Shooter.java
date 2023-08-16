@@ -46,8 +46,6 @@ public class Shooter extends SubsystemBase {
   private InterpolatingTreeMap pivotAngle = new InterpolatingTreeMap();
 
   private FrontLimelight m_limelight;
-  private TunableNumber tunablePivotAngle = new TunableNumber("set pivot angle", 0);
-  private TunableNumber tunableShooterVelocity = new TunableNumber("set shooter velocity", 0);
 
   public enum KickerState {
     INTAKING, OUTTAKING, STOPPED
@@ -270,7 +268,6 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     setCalculatedPivotVoltage();
     setCalculatedFlywheelVoltage();
-    setPreset(new ShooterPreset(tunablePivotAngle.get(), tunableShooterVelocity.get()));
     
     SmartDashboard.putNumber("Shooter Pivot", Units.radiansToDegrees(getPivotAngleRadians()));
     SmartDashboard.putNumber("Shooter Target Pivot", Units.radiansToDegrees(getPivotTarget()));

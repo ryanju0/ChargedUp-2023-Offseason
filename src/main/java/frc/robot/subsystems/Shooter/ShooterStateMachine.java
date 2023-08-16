@@ -13,9 +13,14 @@ import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.utils.TunableNumber;
+import frc.robot.utils.ShooterPreset;
 
 public class ShooterStateMachine {
   Shooter m_shooter;
+
+  private TunableNumber tunablePivotAngle = new TunableNumber("set pivot angle", -95);
+  private TunableNumber tunableShooterVelocity = new TunableNumber("set shooter velocity", 0);
 
   public enum ShooterState {
     RETRACT, HOLD, MANUAL, DYNAMIC
@@ -67,13 +72,16 @@ public class ShooterStateMachine {
   }
   
   private Command toDynamic(ShooterScoreLevel shooterScorelevel) {
-    return new SelectCommand(
-        Map.ofEntries(
-          Map.entry(ShooterScoreLevel.HIGH, m_shooter.setHigh()),
-          Map.entry(ShooterScoreLevel.MIDDLE, m_shooter.setMiddle()),
-          Map.entry(ShooterScoreLevel.LOW, m_shooter.setLow()),
-          Map.entry(ShooterScoreLevel.INTAKE, m_shooter.intakeSequence())
-        ), () -> shooterScorelevel);
+    return new SequentialCommandGroup(
+      m_shooter.setPreset(new ShooterPreset(tunablePivotAngle.get(), tunableShooterVelocity.get()))
+      );
+    // return new SelectCommand(
+    //     Map.ofEntries(
+    //       Map.entry(ShooterScoreLevel.HIGH, m_shooter.setHigh()),
+    //       Map.entry(ShooterScoreLevel.MIDDLE, m_shooter.setMiddle()),
+    //       Map.entry(ShooterScoreLevel.LOW, m_shooter.setLow()),
+    //       Map.entry(ShooterScoreLevel.INTAKE, m_shooter.intakeSequence())
+    //     ), () -> shooterScorelevel);
       //m_shooter.setDynamicEnabledCommand(true, shooterScorelevel));
   }
 
