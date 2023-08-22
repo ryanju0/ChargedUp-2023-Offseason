@@ -91,7 +91,6 @@ public class RobotContainer {
 
 	public void setTeleopDefaultStates() {
 		System.out.println("setTeleopDefaultStates()");
-		Commands.runOnce(m_drivetrain::zeroHeading, m_drivetrain).schedule();
 		new SequentialCommandGroup(
 			m_superstructure.setCargoTypeCommand(CargoType.CONE),
 			m_superstructure.setSubsystemState(DPAD.DOWN),
